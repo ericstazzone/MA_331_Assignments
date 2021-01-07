@@ -1,0 +1,55 @@
+---
+title: "MA331HW3"
+author: "Eric Stazzone"
+date: "9/28/2020"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r estimation, echo=FALSE}
+me <- function(gsample){
+  estimate = (2/length(gsample)) * sum(gsample)
+  return (estimate)
+}
+mle <- function(gsample){
+  estimate = max(gsample)
+  return (estimate)
+}
+samples <- matrix(0, nrow = 100, ncol = 30)
+for (i in 1:100){
+  samples[i,] = runif(n=30, min=0, max=7)
+}
+
+me_est = NULL
+mle_est = NULL
+
+for(i in 1:100){
+  me_est[i] = me(gsample = samples[i,])
+  mle_est[i] = mle(gsample = samples[i,])
+}
+
+boxplot(me_est, mle_est, 
+        main = "Estimate Boxplot")
+axis(1, at= 1:2, labels=c("ME", "MLE"))
+points(c(mean(me_est), mean(mle_est)), col="blue", pch = 19)
+        
+
+sizes <- c(20,30,50,100,150)
+me_est1 = NULL;
+mle_est1 = NULL;
+
+for (i in 1:5){
+  gsample <- runif(n = sizes[i], min = 0, max = 7)
+  me_est1[i] = me(gsample)
+  mle_est1[i] = mle(gsample)
+}
+
+plot(me_est1, main="ME Est")
+plot(mle_est1, main="MLE Est")
+plot(me_est1, mle_est1, main="ME MLE Est")
+
+
+```
