@@ -1,0 +1,50 @@
+---
+title: "MA331HW5"
+author: "Eric Stazzone"
+date: "10/18/2020"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+## Exercise 7.71
+The t-test is appropriate because the data is similiar to the normal distribution.
+```{r r1}
+
+```
+```{r pressure, echo=FALSE}
+
+```
+
+## Exercise 7.89
+```{r r2}
+
+```
+```{r pressure, echo=FALSE}
+
+```
+
+## Exercise 7.102
+```{r r3}
+
+```
+```{r pressure, echo=FALSE}
+
+```
+
+## Exercise 7.122
+```{r r4}
+
+```
+```{r pressure, echo=FALSE}
+
+```
+
+## Exercise 8.7
+```{r r5}
+
+```
+```{r pressure, echo=FALSE}
+
+```
