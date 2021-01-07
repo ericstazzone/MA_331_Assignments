@@ -1,0 +1,141 @@
+---
+title: "MA331HW7"
+author: "Eric Stazzone"
+date: "11/10/2020"
+output: pdf_document
+---
+I pledge my honor that I have abided by the Stevens Honor System.
+library(agricolae)
+Exercise 12.31
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(echo = TRUE, out.width="50%", out.height = "50%")
+```
+```{r r1, echo=FALSE}
+ctrl <- c(5.3,3.9,16.5-14.9,-0.3,-4.3,-30.4,-12.5,-15.4,-19.5,-6.5,13.4,-4.2,6.9,25.5,-0.3,-3.2,1.9,-6.6,-12.7,-1.2,-13.7,14.3,8.8,6.8,-7.1,-9.9,-5.6,15.5,4.8,6.1,-4.9,6.1,6.6,-4.5)
+indiv <- c(-6.8,-4.8,5.5,11.9,-9.0,-4.7,-9.1,-15.1,-1.6,-3.8,7.3,-6.3,12.4,-0.9,-1.9,-18.3,6.9,-17.8,10.4,-23.5,8.0,-5.7,0.5,-2.1,-5.0,-8.4,0.2,12.0,-5.6,-1.6,-10.7,-4.0,-11.0,-12.1,-15.1)
+grp <-c(-11.4,-7.3,-19.8,-13.7,-9.0,-22.4,-9.6,1.1,-2.6,-0.4,-2.5,-1.0,-2.2,-32.1,-30.5,-4.1,-18.1,-5.5,-14.1,-18.2,-11.0,-19.0,3.1,-12.0,-24.4,-11.3,11.3,-5.2,-12.9,-18.6,19.4,-19.2,-23.9,-19.6)
+print("Size |   Mean   |  SD")
+cat("CTRL:  ", 35, mean(ctrl), sd(ctrl))
+cat("INDIV: ", length(indiv), mean(indiv), sd(indiv))
+cat("GRP:   ", length(grp), mean(grp), sd(grp))
+```
+
+It is reasonable to pool the variances because they are within less than 1 proportionatly, meaning they are similar enough to pool. 
+```{r r2, echo=FALSE}
+hist(ctrl, xlim=c(-40,40), breaks=9)
+hist(indiv, xlim=c(-40,40), breaks=9)
+hist(grp, xlim=c(-40,40), breaks=9)
+```
+
+I am confident that the sample means are approximately normal because the curve and the data is roughly symmetric at the mean, while the mean is the one with the greatest amount of frequency. 
+
+Exercise 12.32
+
+a. 
+```{r r3, echo=FALSE}
+library(readxl)
+ex12_31loss <- read_excel("C:/Users/essta/Downloads/ex12-31loss.xls")
+test <- aov(Loss~Group, ex12_31loss)
+print(summary(test))
+```
+
+P < .05, therefore we reject H0,means are different. We conclude that we need to perform some further studies to check which population means differ from others and by how much. 
+
+b.
+```{r r4, echo=FALSE}
+model.lm = lm(Loss~Group, ex12_31loss)
+model.res = resid(model.lm)
+plot(ex12_31loss$Loss, model.res)
+```
+
+That each of the residuals follow the same slope, with the dispersion being relatively close to 0, however one line is further away from the rest, meaning that the difference between them is not exactly 0.
+
+c.
+```{r r575, echo=FALSE}
+sp = ((35-1)*(11.5007**2))+((35-1)*(9.07**2))+((34-1)*(11.13**2))
+sp = sp / (34+35+34-3)
+print(sp)
+t1 = (11.5007-9.07)/sqrt((sp)*((1/35)+(1/35)))
+t2 = 9.07-11.13/sqrt((sp)*((1/35)+(1/34)))
+t3 = 11.5007-11.13/sqrt((sp)*((1/35)+(1/34)))
+p1 = 2*(1-pt(t1, 101))
+p2 = 2*(1-pt(t2, 101))
+p3 = 2*(1-pt(t3, 101))
+print(p1)
+print(p2)
+print(p3)
+```
+d.
+So in our Aov we concluded that we would need further studies to prove if the population means differed. Then did a least-sig difference method to check and when comparing ctrl to indiv, the difference was greater therefore we fail to reject for comparing ctrl to indiv, while rejecting H0 for indiv/grp and grp/ctrl. While in b the same mean strained from the other two.
+
+
+Exercise 12.33
+```{r r6, echo=TRUE}
+kilogram <- read_excel("C:/Users/essta/Downloads/kilogram.xlsx")
+test <- aov(Loss~Group, kilogram)
+print(summary(test))
+```
+b. Dividing by 2.2 wont change data, since the normality is the same, the results are the same as the previous question. 
+
+Exercise 12.41
+
+a. contrast 1 = u2 - (u1+u4)/2
+
+b. contrast 2 = (u1+u2+u4)/3-u3
+
+Exercise 12.42
+
+a. C1: H0: eye color has no effect
+       Ha: brown eye color has an effect on the mean
+    
+   C2: H0: eye visibility has no effect
+       Ha: eye visibility has an effect on the mean
+       
+b. C1: 3.72-(3.19+3.86)/2 = .195
+
+   C2: (3.19+3.72+3.86)/3 - 3.11 = .48
+
+c. 
+```{r r7, echo=FALSE}
+c1 = 2.81*((1/37)+(.25/67)+(.25/77))
+c1 = sqrt(c1)
+print(c1)
+c2 = 2.81*((.11/37)+(.11/67)+(.11/77)+(1/41))
+c2 = sqrt(c2)
+print(c2)
+```
+   
+d. 
+```{r r8, echo=FALSE}
+c1 = 2.81*((1/37)+(.25/67)+(.25/77))
+c1 = sqrt(c1)
+c2 = 2.81*((.11/37)+(.11/67)+(.11/77)+(1/41))
+c2 = sqrt(c2)
+Tc1 = .195/c1
+Tc2 = .48/c2
+print((1-pt(Tc1, 218))*2)
+print((1-pt(Tc2, 218))*2)
+```
+Don't reject HO for either tests, both > .05, for C1 eye color has no effect on the mean. C2, eye visibility has no effect on the mean. 
+
+e.
+```{r r9, echo=FALSE}
+c1 = 2.81*((1/37)+(.25/67)+(.25/77))
+c1 = sqrt(c1)
+c2 = 2.81*((.11/37)+(.11/67)+(.11/77)+(1/41))
+c2 = sqrt(c2)
+Tc1 = .195/c1
+Tc2 = .48/c2
+print("Confidence Interval C1")
+print(.195-(Tc1)*c1)
+print("-")
+print(.195+(Tc1)*c1)
+print("Confidence Interval C2")
+print(.48-(Tc2)*c2)
+print("-")
+print(.48+(Tc2)*c2)
+```
+
+   
+
