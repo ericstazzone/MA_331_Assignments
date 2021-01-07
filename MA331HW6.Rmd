@@ -1,0 +1,57 @@
+---
+title: "MA331HW6"
+author: "Eric Stazzone"
+date: "10/24/2020"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+```{r r1}
+standnorm <- c(rnorm(500))
+int1 <- c()
+int2 <- c()
+int3 <- c()
+int4 <- c()
+int5 <- c()
+for (i in standnorm){
+  if (i <= -.7){
+    int1 <- c(int1, i)
+  }
+  else if (i > -.7 && i <= -.2){
+    int2 <- c(int2, i)
+  }
+  else if (i > -.2 && i<= .2){
+    int3 <- c(int3, i)
+  }
+  else if (i > .2 && i<= .7){
+    int4 <- c(int4, i)
+  }
+  else{
+    int5 <- c(int5, i)
+  }
+}
+len1 = (length(int1))
+len2 = (length(int2))
+len3 = (length(int3))
+len4 = (length(int4))
+len5 = (length(int5))
+
+pexp1 = .2420*500
+pexp2 = .1787*500
+pexp3 = .1586*500
+pexp4 = pexp2
+pexp5 = pexp1
+
+actexp1 = ((len1-pexp1)**2)/pexp1
+actexp2 = ((len2-pexp2)**2)/pexp2
+actexp3 = ((len3-pexp3)**2)/pexp3
+actexp4 = ((len4-pexp4)**2)/pexp4
+actexp5 = ((len5-pexp5)**2)/pexp5
+
+sum = actexp1+actexp2+actexp3+actexp4+actexp5
+
+print(1-pchisq(sum, 4))
+```
+greater than .05, therefore not enough evidence, don't reject H0.
