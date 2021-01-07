@@ -1,0 +1,88 @@
+---
+title: "MA331HW2"
+author: "Eric Stazzone"
+date: "9/14/2020"
+output: pdf_document
+---
+
+I pledge my honor that I have abided by the Stevens Honor System.
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, out.width="50%", out.height = "50%")
+```
+
+Problem 1
+(i) P(N<=8.25) using R function
+```{r n1}
+n <- c(20,30,50,75,100)
+x <- 8.25
+p <- .4
+result1 <- pbinom(x, n, p)
+cat(result1)
+```
+(ii) P(N<=8.25) using Laplace Theorem
+```{r n2}
+result2 <- (x - (20*p)) / (sqrt ((20*p)*(1-p)))
+result3 <- (x - (30*p)) / (sqrt ((30*p)*(1-p)))
+result4 <- (x - (50*p)) / (sqrt ((50*p)*(1-p)))
+result5 <- (x - (75*p)) / (sqrt ((75*p)*(1-p)))
+result6 <- (x - (100*p)) / (sqrt ((100*p)*(1-p)))
+
+f <- function(result2) {1/sqrt(2*pi)*exp(-result2^2/2)}
+result7 <- integrate(f, lower = -Inf, upper = result2)
+
+f <- function(result3) {1/sqrt(2*pi)*exp(-result3^2/2)}
+result8 <- integrate(f, lower = -Inf, upper = result3)
+
+f <- function(result4) {1/sqrt(2*pi)*exp(-result4^2/2)}
+result9 <- integrate(f, lower = -Inf, upper = result4)
+
+f <- function(result5) {1/sqrt(2*pi)*exp(-result5^2/2)}
+result10 <- integrate(f, lower = -Inf, upper = result5)
+
+f <- function(result6) {1/sqrt(2*pi)*exp(-result6^2/2)}
+result11 <- integrate(f, lower = -Inf, upper = result6)
+
+laplace <- c(result7$value, result8$value, result9$value, result10$value, result11$value)
+cat(laplace)
+```
+
+(iii) Scatter Plot of Error Between Accurate Computation and the Laplace Approximation
+```{r n3}
+accurate <- c(result1)
+errorAL <- abs(accurate-laplace)
+plot(errorAL)
+```
+
+(iv) If the number of 'n' trials increase, the Laplace Theorem can estimate P(N<=8.25) exponentially better (towards 0 error). 
+
+Problem 2
+```{r n4, echo=FALSE}
+sim = function(n,k){
+  av <- vector()
+  bv <- vector()
+  for(i in 1:k){
+    x <- rnorm(n,2,3)
+    a <- (mean(x)-2)/(sqrt(9/n))
+    b <- (n-1)*var(x)/9
+    av <- c(av,a)
+    bv <- c(bv,b)
+  }
+  d <- density(av)
+  d2 <- density(bv)
+  par(mfrow = c(1,2))
+  plot(d, main = "Density 1")
+  plot(d2, main = "Density 2")
+  plot(av, bv, main = "Combined", xlab = "Mean", ylab = "Variance")
+}
+sim(20, 100)
+sim(30, 100)
+sim(50, 100)
+sim(75, 100)
+```
+
+(v) For the estimated density curves of the mean and the variance, as the 'n' increases, the mean does not veer from 0. However for the variance density curves, the point where the majority lie increases as 'n' increases. 
+
+(vi) For (i-iv) as 'n' increases, the majority of the points increase in the y-direction while still remaining centered around 0. Variance increases due to the fact that the variance is related to n by (*n-1) multiplying it size in each different test while the mean trends toward 0 as 'n' becomes larger.
+
+
