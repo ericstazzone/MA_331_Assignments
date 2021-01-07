@@ -1,0 +1,191 @@
+---
+title: "MA331HW8"
+author: "Eric Stazzone"
+date: "12/4/2020"
+output: pdf_document
+---
+I pledge my honor that I have abided by the Stevens Honor System.
+
+Exercise 10.32:
+```{r setup, include=FALSE}
+library(readxl)
+water <- read_excel("C:/Users/essta/Downloads/Water-Quality.xlsx")
+knitr::opts_chunk$set(echo = TRUE, out.width="40%", out.height = "40%")
+h2o.lm = lm(IBI~Area, water)
+h2oo.lm = lm(IBI~Forest, water)
+```
+a)   
+
+    IBI:
+    Mean:
+```{r r1, echo=FALSE}
+mean(water[["IBI"]])
+```
+    Five Number Summary: (Min, Q1, Median Q3, Max)
+```{r r2, echo=FALSE}
+fivenum(water[["IBI"]])
+```
+    AREA:
+    Mean:
+```{r r3, echo=FALSE}
+mean(water[["Area"]])
+```
+    Five Number Summary: (Min, Q1, Median Q3, Max)
+```{r r4, echo=FALSE}
+fivenum(water[["Area"]])
+```
+    Histograms for IBI and AREA respectively:
+```{r r5, echo=FALSE}
+hist(water[["IBI"]])
+hist(water[["Area"]])
+```
+    Boxplots for IBI and AREA respectively:
+```{r r6, echo=FALSE}
+boxplot(water[["IBI"]])
+boxplot(water[["Area"]])
+```
+IBI has a negative skew while Area has a positive skew, neither have a roughly symmetrical distribution. It can be seen on the boxplots as well where the max/min stretches about 60 places, but for the IBI mean is not in the middle nor the same for Area.  
+
+b) Plot of the Relationship Between IBI and Area.
+```{r r7, echo=FALSE}
+plot(water[["Area"]],water[["IBI"]])
+```
+The relationship between IBI and Area has a weak positive coefficient, where there are two outliers in the Area data set with none in the IBI data set. There is an unusual cluster of values when Area is low and IBI is high are both high.
+
+c) yi = b0 + b1xi + ei
+
+d)
+
+      H0: bi = 0, where there is no effect of Area on IBI
+      Ha: bi != 0, where there is an effect of Area on IBI
+      
+e)
+```{r r8, echo=FALSE}
+fm1 = lm (water[["IBI"]] ~ water[["Area"]])
+summary(fm1)
+plot(water[["IBI"]] ~ water[["Area"]], data = water, main = "The First Model")
+abline(fm1, col="blue")
+```
+We can reject the null hypothesis because our p-value is less than .05 (alpha). Area affects IBI significantly enough. 
+
+f)
+```{r r9, echo=FALSE}
+plot(residuals(fm1),water[["Area"]])
+```
+No there is nothing unusual with the plot, its pretty symmetrical and centered around 0, with possible 1 clear outlier.
+
+g)
+```{r r10, echo=FALSE}
+qqnorm(residuals(fm1), main = "The First Model")
+```
+Based on our QQ plot, our residuals seem to be normal as it follows a normal distribution.
+
+h)
+The data seems to be normal throughout (plotted against each other and regression plots), therefore we can say that our assumptions seem to be normal. 
+
+Exercise 10.33
+a)
+
+    Forest:
+    Mean:
+```{r r11, echo=FALSE}
+mean(water[["Forest"]])
+```
+    Five Number Summary: (Min, Q1, Median Q3, Max)
+```{r r12, echo=FALSE}
+fivenum(water[["Forest"]])
+```
+    IBI:
+    Mean:
+```{r r13, echo=FALSE}
+mean(water[["IBI"]])
+```
+    Five Number Summary: (Min, Q1, Median Q3, Max)
+```{r r14, echo=FALSE}
+fivenum(water[["IBI"]])
+```
+    Histogram for Forest:
+```{r r15, echo=FALSE}
+hist(water[["Forest"]])
+```
+    
+    Boxplots for Forest:
+```{r r16, echo=FALSE}
+boxplot(water[["Forest"]])
+```
+
+Percent Forest has a right skew. IBI remains the same.
+
+b) Plot of the Relationship Between IBI and Area.
+```{r r17, echo=FALSE}
+plot(water[["Forest"]],water[["IBI"]])
+```
+There is a weaker positive association, Forest has a wider range of scatter than IBI.
+
+c) yi = b0 + b1xi + ei
+
+d)
+
+      H0: bi = 0, where there is no effect of Forest % on IBI
+      Ha: bi != 0, where there is an effect of Forest % on IBI
+      
+e)
+```{r r18, echo=FALSE}
+fm1 = lm (water[["IBI"]] ~ water[["Forest"]])
+summary(fm1)
+plot(water[["IBI"]] ~ water[["Forest"]], data = water, main = "The Second Model")
+abline(fm1, col="blue")
+```
+We fail to reject the null hypothesis because our p-value is greater than .05 (alpha).
+
+f)
+```{r r19, echo=FALSE}
+plot(residuals(fm1),water[["Forest"]])
+```
+It is different from the 10.32's "f" because it does not represent a normal distribution as well as the other did.
+g)
+```{r r20, echo=FALSE}
+qqnorm(residuals(fm1), main = "The Second Model")
+```
+Based on our QQ plot, our residuals do not represent a normal distribution as did the Area, strays from its linear slope. 
+
+h)
+We can say that our assumptions are less reasonable than Area in the previous exercise due less accurate results.
+
+Exercise 10.34
+
+I would prefer to use the 10.32's analysis over 10.33 as the data was based on the normal distribution more.
+
+Exercise 10.35
+```{r r21 , echo=FALSE}
+water2 <- read_excel("C:/Users/essta/Downloads/test1.xlsx")
+fm2 = lm (water2[["Forest"]] ~ water2[["IBI"]])
+summary(fm2)
+water3 <- read_excel("C:/Users/essta/Downloads/test2.xlsx")
+fm3 = lm (water3[["Forest"]] ~ water3[["IBI"]])
+summary(fm3)
+```
+For decreasing IBI to 0 for when forest % = 0, a greater association is formed, we can see that in the p value decreasing.
+For decreasing IBI to 0 for when forest % = 100, a lesser association is formed, and the p value increases. 
+
+Exercise 10.36
+```{r r22 , echo=FALSE}
+newdata = data.frame(Area = 40)
+predict(h2o.lm, newdata, interval = "confidence")
+predict(h2o.lm, newdata, interval = "prediction")
+```
+c)
+The confidence interval for the mean IBI is (65.61, 77.044), while the predicted IBI interval is (37.57, 105.08). We can see that the mean confidence interval has a smaller range than the predicted confidence interval.
+d)
+These results cannot be applied to other streams in Arkansas or in other states because they have different geologic formations that establish varying forms of watersheds that are not similar. 
+
+Exercise 10.37
+```{r r23 , echo=FALSE}
+newdata2 = data.frame(Area = 10)
+predict(h2o.lm, newdata2, interval = "prediction")
+```
+```{r r24 , echo=FALSE}
+newdata3 = data.frame(Forest = 63)
+predict(h2oo.lm, newdata3, interval = "prediction")
+```
+The results are uncertain due to the high range in the confidence level, however they differ because each has a different correlation to IBI.
